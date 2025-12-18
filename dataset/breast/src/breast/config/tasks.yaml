@@ -1,0 +1,31 @@
+interpretation_task:
+  description: >
+    The breast MRI tumor detection model produced a tumor probability of {probability}.
+    Interpret this result in clear, medically accurate language suitable for a patient
+    or clinician.
+  expected_output: >
+    A concise explanation of what the prediction means medically.
+  agent: radiologist
+
+
+qa_task:
+  description: >
+    Evaluate whether the prediction probability {probability} is sufficiently confident.
+    Flag the result as uncertain if probability is between 0.4 and 0.6.
+  expected_output: >
+    A short assessment stating whether the prediction is confident or uncertain.
+  agent: qa_specialist
+
+
+
+reporting_task:
+  description: >
+    Create a structured breast MRI diagnostic report using the interpretation and QA assessment.
+    Include:
+    - Summary
+    - Tumor likelihood
+    - Confidence level
+    - Medical disclaimer
+  expected_output: >
+    A professional breast MRI diagnostic report formatted in markdown (no code blocks).
+  agent: report_writer

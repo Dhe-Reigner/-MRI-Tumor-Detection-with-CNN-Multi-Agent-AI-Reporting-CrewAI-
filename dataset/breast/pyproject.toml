@@ -1,0 +1,23 @@
+[project]
+name = "breast"
+version = "0.1.0"
+description = "breast using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.175.0,<1.0.0"
+]
+
+[project.scripts]
+breast = "breast.main:run"
+run_crew = "breast.main:run"
+train = "breast.main:train"
+replay = "breast.main:replay"
+test = "breast.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
