@@ -6,6 +6,11 @@ from keras.preprocessing.image import load_img,img_to_array
 from PIL import Image
 from main import run as run_crew
 
+from rag.vectorstore import build_vectorstore
+from rag.retriever import retrieve_context
+from rag.generator import generate_medical_guidance
+
+
 #from langchain_huggingface import ChatHuggingFace,HuggingFaceEndpoint
 #from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_groq import ChatGroq
@@ -17,7 +22,7 @@ load_dotenv()
 # Load Modal
 model = load_model('bestmodel.keras')
 
-def main():
+def main(vectorstore):
     st.set_page_config(page_title='MRI Brain Tumor Detection',page_icon='🧠')
     st.title('🧠MRI Brain Tumor Detection')
 
@@ -55,9 +60,21 @@ def main():
 
         with st.spinner('AI Radiology team generating report...'):
             report  = run_crew(pred)
+        
+        label = 'malignant' if pred > 0.5 else 'benign'
+
+        query = f"""
+        MRI brain tumor detected as {label}.
+        Provide educational guidance and general information.
+        """
+
+        with st.spinner('Generating Educational Medical Guidance...'):
+            context = retrieve_context(vectorstore, query)
+            rag_response = generate_medical_guidance(pred,context)
 
         st.subheader('🩺 AI- Generated Breast MRI Report')
-        st.write(report.raw)
+        #st.write(report.raw)
+        st.write(rag_response)
 
         st.caption(
             '⚠️ This system is for research and educational purposes only.'

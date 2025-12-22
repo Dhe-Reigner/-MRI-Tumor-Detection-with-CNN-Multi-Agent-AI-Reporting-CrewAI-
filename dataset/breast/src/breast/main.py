@@ -5,6 +5,8 @@ import warnings
 from datetime import datetime
 
 from crew import Breast
+from dataset.breast.src.breast.rag import vectorstore
+from dataset.breast.src.breast.rag.vectorstore import build_vectorstore
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
@@ -13,6 +15,7 @@ warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 #!/usr/bin/env python
 import subprocess
 import os
+import streamlit as st
  
 def run(probability:float):
     """
@@ -35,4 +38,10 @@ def run(probability:float):
     except Exception as e:
         raise Exception(f"Crew execution failed: {e}")
 
+
+@st.cache_resource
+def init_rag():
+    return build_vectorstore()
+
+vectorstore = init_rag()
 
